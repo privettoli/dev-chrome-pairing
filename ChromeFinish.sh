@@ -24,14 +24,6 @@ printf "default-cache-ttl 60\nmax-cache-ttl 60" > $HOME/.gnupg/gpg-agent.conf
 username=`echo $1 | tr -d '[:space:]'`
 email=$username@corelogic.com
 
-# End the script if user's SSH keys are not present
-echo Checking SSH keys are present...
-locationOfSshKeys=$HOME/.ssh/$username.rsa
-if [ ! -f $locationOfSshKeys ]; then
-	echo "Couldn't find SSH keys of that user '$username' under path $locationOfSshKeys"
-	exit -1
-fi
-
 locationOfChromeUsers=$HOME/ChromeUsers
 locationOfUnencryptedDirectory=$locationOfChromeUsers/$username
 locationOfEncryptedArchive=$locationOfChromeUsers/encrypted/$username.tar.gz.dat

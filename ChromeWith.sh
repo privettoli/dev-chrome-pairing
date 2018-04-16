@@ -24,16 +24,9 @@ printf "default-cache-ttl 60\nmax-cache-ttl 60" > $HOME/.gnupg/gpg-agent.conf
 # Parsing the attributes to work within the script
 username=$1
 
-locationOfSshKeys=$HOME/.ssh/$username.rsa
 locationOfChromeUsers=$HOME/ChromeUsers
 locationOfUnencryptedDirectory=$locationOfChromeUsers/$username
 locationOfEncryptedArchive=$locationOfChromeUsers/encrypted/$username.tar.gz.dat
-
-# Find the SSH keys for that user
-if [ -z $locationOfSshKeys ]; then
-	echo "Couldn't find SSH keys of that user '$username'"
-	exit -1
-fi
 
 if [[ ! $(gpg -k | grep $username) ]]; then
 	echo "Creating new Google Chrome profile for $username"
