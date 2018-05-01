@@ -43,5 +43,20 @@ echo RELOADAGENT | gpg-connect-agent
 # todo Go background / minimize the terminal window
 
 # Run a new process with correct user folder
-/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --user-data-dir=$locationOfUnencryptedDirectory
+sudo cp /Applications/Google\ Chrome.app/Contents/Info.plist /Applications/Google\ Chrome.app/Contents/Info.plist.${1}.backup
+sudo cp /Applications/Google\ Chrome.app/Contents/Resources/en.lproj/InfoPlist.strings /Applications/Google\ Chrome.app/Contents/Resources/en.lproj/InfoPlist.strings.${1}.backup
 
+cat /Applications/Google\ Chrome.app/Contents/Info.plist|sed -e 's,<string>Google Chrome</string>,<string>Chrome for '${1}'</string>,g'>/tmp/Chrome.${1}.Info.plist
+sudo cp /tmp/Chrome.${1}.Info.plist /Applications/Google\ Chrome.app/Contents/Info.plist
+
+cat /Applications/Google\ Chrome.app/Contents/Resources/en.lproj/InfoPlist.strings|sed -e 's,CFBundleDisplayName = "Google Chrome",CFBundleDisplayName = "Chrome for '$1'",g'>/tmp/Chrome.${1}.InfoPlist.strings
+cat /tmp/Chrome.${1}.InfoPlist.strings|sed -e 's,CFBundleName = "Chrome",CFBundleName = "Chrome for '$1'",g'>/tmp/Chrome.${1}.InfoPlist.strings2
+sudo cp /tmp/Chrome.${1}.InfoPlist.strings2 /Applications/Google\ Chrome.app/Contents/Resources/en.lproj/InfoPlist.strings
+
+nohup /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --user-data-dir=$locationOfUnencryptedDirectory >> /dev/null& 
+
+
+sudo cp /Applications/Google\ Chrome.app/Contents/Info.plist.${1}.backup /Applications/Google\ Chrome.app/Contents/Info.plist
+sudo rm /Applications/Google\ Chrome.app/Contents/Info.plist.${1}.backup 
+sudo cp /Applications/Google\ Chrome.app/Contents/Resources/en.lproj/InfoPlist.strings.${1}.backup /Applications/Google\ Chrome.app/Contents/Resources/en.lproj/InfoPlist.strings
+sudo rm /Applications/Google\ Chrome.app/Contents/Resources/en.lproj/InfoPlist.strings.${1}.backup 
